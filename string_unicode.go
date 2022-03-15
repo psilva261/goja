@@ -6,13 +6,14 @@ import (
 	"hash/maphash"
 	"io"
 	"math"
+	"math/big"
 	"reflect"
 	"strings"
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/dop251/goja/parser"
-	"github.com/dop251/goja/unistring"
+	"github.com/psilva261/goja/parser"
+	"github.com/psilva261/goja/unistring"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -329,6 +330,12 @@ func (s unicodeString) toTrimmedUTF8() string {
 
 func (s unicodeString) ToNumber() Value {
 	return asciiString(s.toTrimmedUTF8()).ToNumber()
+}
+
+func (s unicodeString) ToBigInt() Value {
+	b := &big.Int{}
+	b.SetString(s.toTrimmedUTF8(), 0)
+	return valueBigInt{b}
 }
 
 func (s unicodeString) ToObject(r *Runtime) *Object {

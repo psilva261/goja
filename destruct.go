@@ -1,7 +1,7 @@
 package goja
 
 import (
-	"github.com/dop251/goja/unistring"
+	"github.com/psilva261/goja/unistring"
 	"reflect"
 )
 
@@ -156,6 +156,10 @@ func (d *destructKeyedSource) deleteSym(s *Symbol, throw bool) bool {
 
 func (d *destructKeyedSource) toPrimitiveNumber() Value {
 	return d.w().toPrimitiveNumber()
+}
+
+func (d *destructKeyedSource) toPrimitiveBigInt() Value {
+	return d.w().toPrimitiveBigInt()
 }
 
 func (d *destructKeyedSource) toPrimitiveString() Value {

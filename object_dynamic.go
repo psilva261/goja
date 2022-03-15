@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/dop251/goja/unistring"
+	"github.com/psilva261/goja/unistring"
 )
 
 /*
@@ -400,6 +400,10 @@ func (*baseDynamicObject) deleteSym(_ *Symbol, _ bool) bool {
 
 func (o *baseDynamicObject) toPrimitiveNumber() Value {
 	return o.val.genericToPrimitiveNumber()
+}
+
+func (o *baseDynamicObject) toPrimitiveBigInt() Value {
+	return o.val.genericToPrimitiveBigInt()
 }
 
 func (o *baseDynamicObject) toPrimitiveString() Value {

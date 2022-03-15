@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dop251/goja/parser"
+	"github.com/psilva261/goja/parser"
 )
 
 func TestGlobalObjectProto(t *testing.T) {

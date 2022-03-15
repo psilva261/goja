@@ -5,11 +5,12 @@ import (
 	"hash/maphash"
 	"io"
 	"math"
+	"math/big"
 	"reflect"
 	"strconv"
 	"strings"
 
-	"github.com/dop251/goja/unistring"
+	"github.com/psilva261/goja/unistring"
 )
 
 type asciiString string
@@ -173,6 +174,12 @@ func (s asciiString) ToNumber() Value {
 	}
 
 	return _NaN
+}
+
+func (s asciiString) ToBigInt() Value {
+	b := &big.Int{}
+	b.SetString(string(s), 0)
+	return valueBigInt{b}
 }
 
 func (s asciiString) ToObject(r *Runtime) *Object {

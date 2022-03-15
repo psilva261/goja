@@ -1,7 +1,7 @@
 package goja
 
 import (
-	"github.com/dop251/goja/parser"
+	"github.com/psilva261/goja/parser"
 	"io/ioutil"
 	"testing"
 )

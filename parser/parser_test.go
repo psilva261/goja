@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dop251/goja/ast"
-	"github.com/dop251/goja/file"
-	"github.com/dop251/goja/token"
-	"github.com/dop251/goja/unistring"
+	"github.com/psilva261/goja/ast"
+	"github.com/psilva261/goja/file"
+	"github.com/psilva261/goja/token"
+	"github.com/psilva261/goja/unistring"
 )
 
 func firstErr(err error) error {
@@ -989,6 +989,22 @@ func Test_parseNumberLiteral(t *testing.T) {
 		test("0", 0)
 
 		test("0x8000000000000000", float64(9.223372036854776e+18))
+	})
+}
+
+func Test_parseBigIntLiteral(t *testing.T) {
+	tt(t, func() {
+		test := func(input string, expect interface{}) {
+			result, err := parseBigIntLiteral(input)
+			is(err, nil)
+			is(result, expect)
+		}
+
+		test("0n", 0)
+
+		test("100n", 100)
+
+		test("0x100n", 0x100)
 	})
 }
 

@@ -7,7 +7,7 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/dop251/goja/unistring"
+	"github.com/psilva261/goja/unistring"
 )
 
 const (

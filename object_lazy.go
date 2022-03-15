@@ -3,7 +3,7 @@ package goja
 import (
 	"reflect"
 
-	"github.com/dop251/goja/unistring"
+	"github.com/psilva261/goja/unistring"
 )
 
 type lazyObject struct {
@@ -167,6 +167,12 @@ func (o *lazyObject) toPrimitiveNumber() Value {
 	obj := o.create(o.val)
 	o.val.self = obj
 	return obj.toPrimitiveNumber()
+}
+
+func (o *lazyObject) toPrimitiveBigInt() Value {
+	obj := o.create(o.val)
+	o.val.self = obj
+	return obj.toPrimitiveBigInt()
 }
 
 func (o *lazyObject) toPrimitiveString() Value {
