@@ -6,7 +6,7 @@ import (
 	"math/big"
 	"reflect"
 	"strconv"
-	"unsafe"
+	"sync"
 
 	"github.com/psilva261/goja/ftoa"
 	"github.com/psilva261/goja/unistring"
@@ -26,6 +26,18 @@ var (
 func randomHash() uint64 {
 	pkgHasher.WriteByte(0)
 	return pkgHasher.Sum64()
+}
+
+var usedUint64s = &sync.Map{}
+
+func uniqueUint64() uint64 {
+	for {
+		h := randomHash()
+		_, loaded := usedUint64s.LoadOrStore(h, 1)
+		if !loaded {
+			return h
+		}
+	}
 }
 
 var (
@@ -101,7 +113,7 @@ type valueUndefined struct {
 // Well-known Symbols can be accessed using Sym* package variables (SymIterator, etc...)
 // Symbols can be shared by multiple Runtimes.
 type Symbol struct {
-	h    uintptr
+	h    uint64
 	desc valueString
 }
 
@@ -1215,7 +1227,7 @@ func newSymbol(s valueString) *Symbol {
 	// Depending on changes in Go's allocation policy and/or introduction of a compacting GC
 	// this may no longer provide sufficient dispersion. The alternative, however, is a globally
 	// synchronised random generator/hasher/sequencer and I don't want to go down that route just yet.
-	r.h = uintptr(unsafe.Pointer(r))
+	r.h = uniqueUint64()
 	return r
 }
 
