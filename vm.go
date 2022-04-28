@@ -3133,8 +3133,15 @@ func (vm *vm) checkBindVarsGlobal(names []unistring.String) {
 		}
 	} else {
 		for _, name := range names {
-			if !o.hasOwnPropertyStr(name) && !o.isExtensible() {
-				panic(vm.r.NewTypeError("Cannot define global variable '%s', global object is not extensible", name))
+			if o == nil {
+				o := vm.r.globalObject.self
+				if !o.hasOwnPropertyStr(name) && !o.isExtensible() {
+					panic(vm.r.NewTypeError("Cannot define global variable '%s', global object is not extensible", name))
+				}
+			} else {
+				if !o.hasOwnPropertyStr(name) && !o.isExtensible() {
+					panic(vm.r.NewTypeError("Cannot define global variable '%s', global object is not extensible", name))
+				}
 			}
 			if _, exists := sn[name]; exists {
 				panic(vm.alreadyDeclared(name))
@@ -3165,14 +3172,27 @@ func (vm *vm) createGlobalVarBindings(names []unistring.String, d bool) {
 			cf = FLAG_FALSE
 		}
 		for _, name := range names {
-			if !o.hasOwnPropertyStr(name) && o.isExtensible() {
-				o.defineOwnPropertyStr(name, PropertyDescriptor{
-					Value:        _undefined,
-					Writable:     FLAG_TRUE,
-					Enumerable:   FLAG_TRUE,
-					Configurable: cf,
-				}, true)
-				o.setOwnStr(name, _undefined, false)
+			if o == nil {
+				o := vm.r.globalObject.self
+				if !o.hasOwnPropertyStr(name) && o.isExtensible() {
+					o.defineOwnPropertyStr(name, PropertyDescriptor{
+						Value:        _undefined,
+						Writable:     FLAG_TRUE,
+						Enumerable:   FLAG_TRUE,
+						Configurable: cf,
+					}, true)
+					o.setOwnStr(name, _undefined, false)
+				}
+			} else {
+				if !o.hasOwnPropertyStr(name) && o.isExtensible() {
+					o.defineOwnPropertyStr(name, PropertyDescriptor{
+						Value:        _undefined,
+						Writable:     FLAG_TRUE,
+						Enumerable:   FLAG_TRUE,
+						Configurable: cf,
+					}, true)
+					o.setOwnStr(name, _undefined, false)
+				}
 			}
 			globalVarNames[name] = struct{}{}
 		}
